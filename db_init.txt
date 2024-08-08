@@ -1,0 +1,49 @@
+-- Tạo bảng user
+CREATE TABLE "user" (
+    id serial PRIMARY KEY ,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL
+);
+
+-- Tạo bảng hotel_ticket
+CREATE TABLE "hotel_ticket" (
+    id serial PRIMARY KEY ,
+    name VARCHAR(255),
+    description TEXT,
+    thumbnail VARCHAR(255),
+    images TEXT[], -- Sử dụng mảng chuỗi cho cột images
+    type VARCHAR(50),
+    location VARCHAR(255),
+    price FLOAT
+);
+
+-- Tạo bảng flight_ticket
+CREATE TABLE "flight_ticket" (
+    id serial PRIMARY KEY ,
+    from_location VARCHAR(255),
+    to_location VARCHAR(255),
+    start_date DATE,
+    end_date DATE,
+    duration FLOAT
+);
+
+-- Tạo bảng owner_ticket
+CREATE TABLE "owner_flight_ticket" (
+    id serial PRIMARY KEY ,
+    passport VARCHAR(50),
+    payment_method VARCHAR(50),
+	ticket_id bigint not null,
+	foreign key (ticket_id) references flight_ticket(id)
+
+);
+CREATE TABLE "owner_hotel_ticket" (
+    id serial PRIMARY KEY ,
+    passport VARCHAR(50),
+    payment_method VARCHAR(50),
+	ticket_id bigint not null,
+	foreign key (ticket_id) references hotel_ticket(id),
+	owner_id bigint,
+	foreign key (owner_id) references "user"(id)
+);
+	
