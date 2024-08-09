@@ -10,14 +10,11 @@ import 'package:ticket_app/screens/hotel_detail.dart';
 import 'package:ticket_app/screens/ticket/ticket_screen.dart';
 import 'package:ticket_app/screens/auth/login.dart';
 import 'package:ticket_app/screens/auth/register.dart';
-import 'package:get/get.dart';
 
 import 'bloc/bottom_nav_bloc.dart';
 
 void main() {
-  runApp(
-      ProviderScope(child: const MyApp())
-  );
+  runApp(ProviderScope(child: const MyApp()));
 }
 
 class MyApp extends ConsumerWidget {
@@ -33,7 +30,7 @@ class MyApp extends ConsumerWidget {
         debugShowCheckedModeBanner: false,
         routes: {
           AppRoutes.register: (context) => RegistrationPage(),
-          AppRoutes.homePage: (context) => authState.isAuthenticated ? BottomNavBar() : LoginPage(),
+          AppRoutes.homePage: (context) => BottomNavBar(),
           AppRoutes.login: (context) => LoginPage(),
           AppRoutes.allTickets: (context) => const AllTickets(),
           AppRoutes.ticketScreen: (context) => const TicketScreen(),

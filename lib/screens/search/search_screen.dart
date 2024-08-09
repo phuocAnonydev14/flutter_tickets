@@ -3,7 +3,10 @@ import 'package:ticket_app/base/res/styles/app_styles.dart';
 import 'package:ticket_app/base/utils/all_json.dart';
 import 'package:ticket_app/base/utils/app_routes.dart';
 import 'package:ticket_app/base/widgets/app_double_text.dart';
+import 'package:ticket_app/base/widgets/custom_text_input.dart';
+import 'package:ticket_app/base/widgets/primary_button.dart';
 import 'package:ticket_app/models/Ticket.dart';
+import 'package:ticket_app/screens/search/hotel_results_screen.dart';
 import 'package:ticket_app/screens/search/ticket_results_screen.dart';
 import 'package:ticket_app/screens/search/widgets/app_text_icon.dart';
 import 'package:ticket_app/screens/search/widgets/app_ticket_tabs.dart';
@@ -20,6 +23,14 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   String? departureTime;
   Place? arrival;
+  final TextEditingController _controller = TextEditingController();
+  int tab = 0;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   Future<void> _selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
@@ -58,17 +69,33 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   void handleSearch() {
-    var filteredTickets = ticketList.where((ticket) {
-      return ticket['departure_time'] == departureTime ||
-          ticket['to']['code'] == arrival?.code;
-    }).toList();
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => TicketResultsScreen(
-                tickets: filteredTickets,
-              )),
-    );
+    if (tab == 0) {
+      var filteredTickets = ticketList.where((ticket) {
+        return ticket['departure_time'] == departureTime ||
+            ticket['to']['code'] == arrival?.code;
+      }).toList();
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => TicketResultsScreen(
+                  tickets: filteredTickets,
+                )),
+      );
+    } else {
+      final text = _controller.text.toLowerCase();
+      var filteredHotels = hotelList.where((hotel) {
+        return (hotel['place'] as String).toLowerCase().contains(text) ||
+            (hotel['destination'] as String).toLowerCase().contains(text) ||
+            (hotel['detail'] as String).toLowerCase().contains(text);
+      }).toList();
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => HotelResultsScreen(
+                  hotels: filteredHotels,
+                )),
+      );
+    }
   }
 
   @override
@@ -88,35 +115,52 @@ class _SearchScreenState extends State<SearchScreen> {
           const SizedBox(
             height: 20,
           ),
-          const AppTicketTabs(
-            firstTab: "All Tickets",
+          AppTicketTabs(
+            firstTab: "Tickets",
             secondTab: "Hotels",
-          ),
-          const SizedBox(
-            height: 25,
-          ),
-          AppTextIcon(
-              icon: Icons.flight_takeoff_rounded,
-              text: departureTime != null ? departureTime! : "Departure",
-              onTap: () {
-                _selectTime(context);
-              }),
-          const SizedBox(
-            height: 20,
-          ),
-          AppTextIcon(
-            icon: Icons.flight_land_rounded,
-            text: arrival != null
-                ? "${arrival?.name} (${arrival?.code})"
-                : "Arrival",
-            onTap: () {
-              _showPicker(context);
+            onChange: (index) {
+              setState(() {
+                tab = index;
+              });
             },
           ),
           const SizedBox(
             height: 25,
           ),
-          FindTickets(
+          tab == 1
+              ? CustomTextInput(
+                  controller: _controller,
+                  hintText: "Search your hotel",
+                  prefixIcon: const Icon(Icons.search))
+              : Column(
+                  children: [
+                    AppTextIcon(
+                        icon: Icons.flight_takeoff_rounded,
+                        text: departureTime != null
+                            ? departureTime!
+                            : "Departure",
+                        onTap: () {
+                          _selectTime(context);
+                        }),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    AppTextIcon(
+                      icon: Icons.flight_land_rounded,
+                      text: arrival != null
+                          ? "${arrival?.name} (${arrival?.code})"
+                          : "Arrival",
+                      onTap: () {
+                        _showPicker(context);
+                      },
+                    ),
+                  ],
+                ),
+          const SizedBox(
+            height: 25,
+          ),
+          PrimaryButton(
+            label: tab == 0 ? "Find Tickets" : "Find Hotels",
             onTap: () {
               handleSearch();
             },

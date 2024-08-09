@@ -1,10 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:ticket_app/base/res/styles/app_styles.dart';
 
-class AppTicketTabs extends StatelessWidget {
+class AppTicketTabs extends StatefulWidget {
+  final Function(int)? onChange;
   final String firstTab;
   final String secondTab;
-  const AppTicketTabs({super.key, required this.firstTab, required this.secondTab});
+  const AppTicketTabs(
+      {super.key,
+      required this.firstTab,
+      required this.secondTab,
+      this.onChange});
+
+  @override
+  State<AppTicketTabs> createState() => _AppTicketTabsState();
+}
+
+class _AppTicketTabsState extends State<AppTicketTabs> {
+  int index = 0;
+
+  void onTap(int tab) {
+    setState(() {
+      index = tab;
+    });
+    if (widget.onChange != null) {
+      widget.onChange!(tab);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,14 +33,24 @@ class AppTicketTabs extends StatelessWidget {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(50),
           color: AppStyles.ticketTabColor),
-      child:  Row(children: [
-        AppTabs(
-          tabText: firstTab,
+      child: Row(children: [
+        Expanded(
+          flex: 1,
+          child: AppTabs(
+            tabText: widget.firstTab,
+            tabBorder: index == 0,
+            tabColor: index == 0,
+            onTap: () => onTap(0),
+          ),
         ),
-        AppTabs(
-          tabText: secondTab,
-          tabBorder: true,
-          tabColor: true,
+        Expanded(
+          flex: 1,
+          child: AppTabs(
+            tabText: widget.secondTab,
+            tabBorder: index == 1,
+            tabColor: index == 1,
+            onTap: () => onTap(1),
+          ),
         )
       ]),
     );
@@ -31,24 +62,25 @@ class AppTabs extends StatelessWidget {
       {super.key,
       this.tabText = "",
       this.tabBorder = false,
-      this.tabColor = false});
+      this.tabColor = false,
+      this.onTap});
 
   final String tabText;
   final bool tabBorder;
   final bool tabColor;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 7),
-      width: size.width * .44,
-      decoration: BoxDecoration(
-          color: tabColor==false?Colors.white:Colors.transparent,
-          borderRadius: tabBorder == false
-              ? const BorderRadius.horizontal(left: Radius.circular(50))
-              : const BorderRadius.horizontal(right: Radius.circular(50))),
-      child: Center(child: Text(tabText)),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        decoration: BoxDecoration(
+            color: tabColor == false ? Colors.transparent : Colors.white,
+            borderRadius: const BorderRadius.all(Radius.circular(50))),
+        child: Center(child: Text(tabText)),
+      ),
     );
   }
 }

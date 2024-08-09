@@ -18,9 +18,11 @@ class _TicketResultsScreenState extends State<TicketResultsScreen> {
     super.initState();
     // Simulate a fake loading time of 3 seconds
     Future.delayed(const Duration(seconds: 2), () {
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     });
   }
 
@@ -28,7 +30,7 @@ class _TicketResultsScreenState extends State<TicketResultsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Ticket results"),
+        title: const Text("Ticket Results"),
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
