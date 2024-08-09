@@ -6,6 +6,28 @@ CREATE TABLE "user" (
     password VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE flights (
+  id SERIAL PRIMARY KEY,
+  from_code VARCHAR(10),
+  from_name VARCHAR(100),
+  to_code VARCHAR(10),
+  to_name VARCHAR(100),
+  flying_time VARCHAR(20),
+  date VARCHAR(50),
+  departure_time VARCHAR(20),
+  number INT
+);
+
+CREATE TABLE hotels (
+  id SERIAL PRIMARY KEY,
+  image VARCHAR(255),
+  place VARCHAR(100),
+  destination VARCHAR(100),
+  price INT,
+  detail TEXT,
+  images TEXT[]
+);
+
 -- Tạo bảng hotel_ticket
 CREATE TABLE "hotel_ticket" (
     id serial PRIMARY KEY ,

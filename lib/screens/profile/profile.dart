@@ -2,17 +2,23 @@ import 'package:fluentui_icons/fluentui_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get/get.dart';
 import 'package:ticket_app/base/res/media.dart';
 import 'package:ticket_app/base/res/styles/app_styles.dart';
 import 'package:ticket_app/base/widgets/app_coloum_text_layout.dart';
 import 'package:ticket_app/base/widgets/heading_text.dart';
 import 'package:ticket_app/base/widgets/text_style_third.dart';
+import 'package:ticket_app/provider/auth_provider.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authProvider);
+
+
     return Scaffold(
       backgroundColor: AppStyles.bgColor,
       body: ListView(
@@ -38,7 +44,7 @@ class ProfileScreen extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const HeadingText(text: "Book Tickets", isColor: false),
+                  const HeadingText(text: "Ho Phuoc", isColor: false),
                   Text(
                     "New-York",
                     style: TextStyle(

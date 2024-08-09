@@ -29,7 +29,6 @@ class LoginPage extends ConsumerWidget {
 
     Future<void> _loginUser(String email, String password, WidgetRef ref) async {
       try{
-
         final url = Uri.parse('http://192.168.78.102:3001/login');
         print('Start fetch');
         final response = await http.post(

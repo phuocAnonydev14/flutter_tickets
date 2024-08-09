@@ -33,7 +33,7 @@ class MyApp extends ConsumerWidget {
         debugShowCheckedModeBanner: false,
         routes: {
           AppRoutes.register: (context) => RegistrationPage(),
-          AppRoutes.homePage: (context) => authState.isAuthenticated ? BottomNavBar() : LoginPage(),
+          AppRoutes.homePage: (context) => BottomNavBar(),
           AppRoutes.login: (context) => LoginPage(),
           AppRoutes.allTickets: (context) => const AllTickets(),
           AppRoutes.ticketScreen: (context) => const TicketScreen(),

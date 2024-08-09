@@ -47,7 +47,7 @@ class TicketView extends StatelessWidget {
                   Row(
                     children: [
                       TextStyleThird(
-                        text: ticket["from_code"],
+                        text: ticket["from_code"] ?? ticket["from"]["code"],
                         isColor: isColor,
                       ),
                       Expanded(child: Container()),
@@ -78,7 +78,7 @@ class TicketView extends StatelessWidget {
                       BigDot(isColor: isColor,),
                       Expanded(child: Container()),
                       TextStyleThird(
-                        text: ticket["to_code"],
+                        text: ticket["to_code"] ?? ticket["to"]["code"],
                         isColor: isColor,
                       ),
                     ],
@@ -92,7 +92,7 @@ class TicketView extends StatelessWidget {
                       SizedBox(
                         width: 100,
                         child: TextStyleFourth(
-                          text: ticket["from_name"],
+                          text: ticket["from_name"] ?? ticket["from"]["name"],
                           isColor: isColor,
                         ),
                       ),
@@ -105,7 +105,7 @@ class TicketView extends StatelessWidget {
                       SizedBox(
                         width: 100,
                         child: TextStyleFourth(
-                          text: ticket["to_name"],
+                          text: ticket["to_name"] ?? ticket["to"]["name"],
                           align: TextAlign.end,
                           isColor: isColor,
                         ),
